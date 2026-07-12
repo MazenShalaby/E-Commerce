@@ -8,7 +8,7 @@
     </p>
 
     <p style="text-align: center;">
-        <a href="http://{{ domain }}{% url 'activate' uidb64=user_id token=generated_token %}" class="button">
+        <a href="http://{{ domain }}{% url 'activate' user_id_64=encoded_user_id token=generated_token %}" class="button">
             Activate Account
         </a>
     </p>
@@ -18,7 +18,7 @@
     </p>
 
     <p style="word-break: break-all;">
-        http://{{ domain }}{% url 'activate' uidb64=user_id token=generated_token %}
+        http://{{ domain }}{% url 'activate' user_id_64=encoded_user_id token=generated_token %}
     </p>
 
     <div class="footer">
