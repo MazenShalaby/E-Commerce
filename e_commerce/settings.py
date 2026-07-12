@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # 3rd party apps
+    'crispy_forms',
+    'crispy_bootstrap4',
+    
     # local apps
     'accounts.apps.AccountsConfig'
 ]
@@ -124,3 +128,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # BASE_DIR / 'staticfiles' #
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # BASE_DIR / 'media' # (Production)
+
+###################################### [Crispy Form Configuration] ######################################
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+################################## [Email Configuration] ################################
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_HOST_USER = '9461da001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD = '467GOL0rscNDQnAT'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'shalabymazn@gmail.com'
