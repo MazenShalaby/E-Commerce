@@ -118,6 +118,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+########################### [Custom User Model Configuration] ##########################
+
+AUTH_USER_MODEL = "accounts.Account"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+] 
+
 ###################################### [Static Configuration] ######################################
 
 STATIC_URL = '/static/'
