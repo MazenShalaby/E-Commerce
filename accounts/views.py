@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
@@ -73,3 +73,13 @@ def login_view(request):
             return redirect('login')
     
     return render(request, 'accounts/login.html', context={})
+
+
+def activate_registered_account(request, user_id_64, token):
+    user_id = urlsafe_base64_decode(user_id_64).decode()
+    user = get_object_or_404(Account, pk=user_id)
+    if (user is not None) and (default_token_generator.check_token(user, token)):
+        user.is_active = True
+        return redirect('login')
+    else:
+        return redirect('register')
