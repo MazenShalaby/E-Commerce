@@ -46,6 +46,7 @@ def register(request):
 
             try:
                 mail.send()
+                return redirect('login' + f"?command=activation&email={email}")
             except:
                 user.delete()
                 raise ValueError("Faild to send activation mail!")
