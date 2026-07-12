@@ -16,6 +16,10 @@ from .models import Account
 
 
 def register(request):
+    
+    if request.user.is_authenticated:
+        return redirect("home")
+    
     if request.method == "POST":
         form = RegisterForm(request.POST, files=request.FILES)
         if form.is_valid():
