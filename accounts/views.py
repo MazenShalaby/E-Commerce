@@ -57,3 +57,18 @@ def register(request):
 
     context = {"form": form}
     return render(request, "accounts/register.html", context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, email, password)
+        
+        if user is not None:
+            return redirect('home')
+        else:
+            return redirect('login')
+    
+    return render(request, 'accounts/login.html', context={})
