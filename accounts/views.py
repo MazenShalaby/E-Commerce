@@ -27,6 +27,7 @@ def register(request):
                 age=form.cleaned_data.get("age"),
                 gender=form.cleaned_data.get("gender"),
                 profile_picture=form.cleaned_data.get("profile_picture"),
+                password=form.cleaned_data.get("password"),
             )
 
             # Account Activation Mail
