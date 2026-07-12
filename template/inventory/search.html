@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Search Result
+{% endblock title %}
+
+{% block content %}
+
+{% if query %}
+    <p>Products Found: {{result_count}}</p>
+{% endif %}
+
+{% for product in result %}
+    <a href="{{product.get_absolute_url}}">{{product.name|linebreaks}}</a>
+{% endfor %}
+
+{% endblock content %}

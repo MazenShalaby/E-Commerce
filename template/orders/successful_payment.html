@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Successful Payment
+{% endblock title %}
+
+{% block content %}
+
+<div class="container justify-content-center">
+    <div class="alert alert-success" role="alert">
+        <p>Your order with Order ID: <b>{{order.order_id}}</b> has been paid successfully!</p>
+    </div>
+</div>
+{% endblock content %}

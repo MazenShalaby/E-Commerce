@@ -1,0 +1,31 @@
+{% autoescape off %}
+
+<div class="container">
+    <h2>Hello {{ user.first_name|default:user.email }},</h2>
+
+    <p>
+        Thank you for registering. Please confirm your email address to activate your account.
+    </p>
+
+    <p style="text-align: center;">
+        <a href="http://{{ domain }}{% url 'activate' uidb64=user_id token=generated_token %}" class="button">
+            Activate Account
+        </a>
+    </p>
+
+    <p>
+        If the button above does not work, copy and paste the following link into your browser:
+    </p>
+
+    <p style="word-break: break-all;">
+        http://{{ domain }}{% url 'activate' uidb64=user_id token=generated_token %}
+    </p>
+
+    <div class="footer">
+        <p>
+            If you did not create an account, you can safely ignore this email.
+        </p>
+    </div>
+</div>
+
+{% endautoescape %}

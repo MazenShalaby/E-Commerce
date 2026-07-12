@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Products
+{% endblock title %}
+
+{% block content %}
+<!-- product section -->
+
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Our Products
+            </h2>
+        </div>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="box">
+                    <div class="img-box">
+                        <img src="{{product.image.url}}" alt="">
+                        <!-- <a href="{% url 'cart-add' product.pk %}" class="add_cart_btn">
+                                <span>
+                                    Add To Cart
+                                </span>
+                            </a> -->
+                    </div>
+                    <div class="detail-box">
+                        <h5>
+                            {% comment %}
+                            <a href="{% url 'product-detail' product_slug=product.slug %}">{{product.name}}</a>
+                            {% endcomment %}
+                            <a href="{{product.get_absolute_url}}">{{product.name}}</a>
+                        </h5>
+                        <div class="product_info">
+                            <h5>
+                                <span>$</span> {{product.price}}
+                            </h5>
+                            <div class="star_container">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="btn_box">
+            <a href="" class="view_more-link">
+                View More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- end product section -->
+{% endblock content %}
