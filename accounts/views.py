@@ -80,6 +80,7 @@ def activate_registered_account(request, user_id_64, token):
     user = get_object_or_404(Account, pk=user_id)
     if (user is not None) and (default_token_generator.check_token(user, token)):
         user.is_active = True
+        user.save()
         return redirect('login')
     else:
         return redirect('register')
