@@ -37,7 +37,7 @@ def register(request):
                 "domain": domain,
                 "user": user,
                 "encoded_user_id": urlsafe_base64_encode(force_bytes(user.pk)),
-                "token": default_token_generator.make_token(user),
+                "generated_token": default_token_generator.make_token(user),
             }
             mail_body = render_to_string(
                 "accounts/account_activation_mail.html", mail_context
