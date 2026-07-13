@@ -18,3 +18,10 @@ def product_list(request, category_slug=None):
         'categories': categories,
         }
     return render(request, 'inventory/product_list.html', context)
+
+
+def product_detail(request, product_slug):
+    product = get_object_or_404(Product, slug=product_slug)
+    
+    context = {'product': product}
+    return render(request, 'inventory/product_detail.html', context)

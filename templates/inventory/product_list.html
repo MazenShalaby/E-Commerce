@@ -34,7 +34,7 @@ Products
                             {% comment %}
                             <a href="product-detail' product_slug=product.slug">{{product.name}}</a>
                             {% endcomment %}
-                            <a href="product.get_absolute_url">{{product.name}}</a>
+                            <a href="{{product.get_absolute_url}}">{{product.name}}</a>
                         </h5>
                         <div class="product_info">
                             <h5>
