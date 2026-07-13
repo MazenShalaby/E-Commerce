@@ -32,12 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # default django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres', # new
     
     # 3rd party apps
     'crispy_forms',
@@ -81,12 +83,12 @@ WSGI_APPLICATION = 'e_commerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -152,3 +154,16 @@ EMAIL_HOST_PASSWORD = '467GOL0rscNDQnAT'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'shalabymazn@gmail.com'
+
+########################### [Postgres DataBase Configuration] ##########################
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "e_commerce_project",
+        "USER": "postgres",
+        "PASSWORD": "Mazenmezo2003@",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
