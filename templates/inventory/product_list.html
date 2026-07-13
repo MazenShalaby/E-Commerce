@@ -20,18 +20,21 @@ Products
                 <div class="box">
                     <div class="img-box">
                         <img src="{{product.image.url}}" alt="">
-                        <!-- <a href="{% url 'cart-add' product.pk %}" class="add_cart_btn">
+
+                        {% comment %}
+                        <a href="{% url 'cart-add' product.pk %}" class="add_cart_btn">
                                 <span>
                                     Add To Cart
                                 </span>
-                            </a> -->
+                            </a>
+                        {% endcomment %}
                     </div>
                     <div class="detail-box">
                         <h5>
                             {% comment %}
-                            <a href="{% url 'product-detail' product_slug=product.slug %}">{{product.name}}</a>
+                            <a href="product-detail' product_slug=product.slug">{{product.name}}</a>
                             {% endcomment %}
-                            <a href="{{product.get_absolute_url}}">{{product.name}}</a>
+                            <a href="product.get_absolute_url">{{product.name}}</a>
                         </h5>
                         <div class="product_info">
                             <h5>
