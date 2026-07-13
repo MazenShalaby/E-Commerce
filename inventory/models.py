@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -32,6 +33,7 @@ class Product(models.Model):
     name = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
     description = models.TextField(max_length=1500)
     image = models.ImageField(upload_to='product/images')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_products')
