@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     
     # local apps
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
     'inventory.apps.InventoryConfig'
 ]
 
