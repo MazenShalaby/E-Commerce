@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 
 
 from .forms import RegisterForm
@@ -82,6 +82,11 @@ def login_view(request):
             return redirect('login')
     
     return render(request, 'accounts/login.html', context={})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
 def activate_registered_account(request, user_id_64, token):
