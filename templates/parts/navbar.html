@@ -1,0 +1,118 @@
+<!-- header section starts -->
+<header class="header_section">
+
+    <div class="header_top">
+        <div class="container-fluid">
+            <div class="top_nav_container">
+
+                <div class="contact_nav">
+                    <a href="#">
+                        <i class="fa fa-phone"></i>
+                        <span>Call : +01 123455678990</span>
+                    </a>
+                    <a href="#">
+                        <i class="fa fa-envelope"></i>
+                        <span>Email : demo@gmail.com</span>
+                    </a>
+                </div>
+
+                <!-- Search Product Form -->
+                <form class="search_form d-flex" method="get" action="{% url 'product-search' %}">
+                    <input type="text" name='query' class="form-control" placeholder="Search here...">
+                    <button type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+
+                <div class="user_option_box">
+                    <a href="{% url 'register' %}" class="account-link">
+                        <i class="fa fa-user"></i>
+                        <span>My Account</span>
+                    </a>
+                    <a href="'cart-detail'" class="cart-link">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>Cart
+                            <span>
+                                {% with total_items=cart|length %}
+                                {% if total_items > 0 %}
+                                <small>{{total_items}} items</small> |
+                                <small>Total: ${{cart.get_total_price}}</small>
+                                {% else %}
+                                <small>No items!</small>
+                                {% endif %}
+                                {% endwith %}
+                            </span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header_bottom">
+        <div class="container-fluid">
+
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <span>E-commerce</span>
+                </a>
+
+                <!-- ✅ FIXED TOGGLER -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <ul class="navbar-nav ms-auto">
+
+                        <li class="nav-item dropdown">
+                            
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Categories
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'product-list' %}">All</a>
+                                </li>
+                                {% for category in categories %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'categorized-product-list' category_slug=category.slug %}">
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Why Us</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Testimonial</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </nav>
+
+        </div>
+    </div>
+
+</header>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
