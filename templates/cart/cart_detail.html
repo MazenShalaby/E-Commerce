@@ -38,7 +38,7 @@ Cart
                 </td>
                 <td>${{item.product.price}}</td>
                 <td>
-                  <form action="{% url 'cart-add' item.product.id %}" method="post">
+                  <form action="{% url 'product-add' product_slug=item.product.slug %}" method="post">
                     {% csrf_token %}
                     {{item.update_item_quantity.quantity}}
                     <!-- update quantity -->
@@ -49,7 +49,7 @@ Cart
                 </td>
                 <td>${{item.total_price}}</td>
                 <td>
-                  <form action="{% url 'cart-remove' item.product.id %}" method="post">
+                  <form action="{% url 'product-remove' product_slug=item.product.slug %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="Remove" class="btn btn-danger">
                   </form>
@@ -78,7 +78,7 @@ Cart
             <input type="text" id="coupon_code" class="form-control" placeholder="Enter your code">
             <button type="submit" class="btn btn-primary mt-2">Apply Coupon</button>
           </form>
-          <a href="{% url 'order-create' %}" class="btn btn-success mt-4 w-100">Checkout</a>
+          <a href="'order-create'" class="btn btn-success mt-4 w-100">Checkout</a>
         </div>
       </div>
     </div>

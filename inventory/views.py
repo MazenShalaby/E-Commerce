@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from .models import Category, Product
+from cart.forms import CartAddForm
 
 # Create your views here.
 
@@ -24,8 +25,12 @@ def product_list(request, category_slug=None):
 
 def product_detail(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
+    cart_add_form = CartAddForm(request.POST)
     
-    context = {'product': product}
+    context = {
+        'product': product,
+        'cart_add_form': cart_add_form
+        }
     return render(request, 'inventory/product_detail.html', context)
 
 

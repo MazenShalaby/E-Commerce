@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('inventory/', include('inventory.urls')),
+    path('cart/', include('cart.urls')),
     path("", TemplateView.as_view(template_name='home.html'), name='home')
 ]
 

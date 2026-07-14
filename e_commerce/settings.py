@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     
     # local apps
     'accounts.apps.AccountsConfig',
-    'inventory.apps.InventoryConfig'
-    'cart.apps.CartConfig'
+    'inventory.apps.InventoryConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
