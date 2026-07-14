@@ -169,3 +169,7 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+########################### [Cart Configuration] ##########################
+
+CART_SESSION_ID = 'cart'
