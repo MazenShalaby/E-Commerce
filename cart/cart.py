@@ -22,9 +22,9 @@ class Cart:
         )
 
         if override_quantity:
-            item["quantity"] = +quantity
-        else:
             item["quantity"] = quantity
+        else:
+            item["quantity"] += quantity
 
         self.save()
 
