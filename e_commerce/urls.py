@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('inventory/', include('inventory.urls')),
     path('cart/', include('cart.urls')),
+    path('orders/', include('orders.urls')),
     path("", TemplateView.as_view(template_name='home.html'), name='home')
 ]
 
