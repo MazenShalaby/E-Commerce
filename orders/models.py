@@ -1,5 +1,7 @@
 from django.db import models
 import string, random
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 from inventory.models import Product
 
 # Create your models here.
@@ -56,3 +58,18 @@ class OrderItem(models.Model):
     
     def get_cost(self):
         return self.price * self.quantity
+
+
+class OrderPayment(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_payments')
+    payment_phone = models.CharField(max_length=11)
+    payment_receipt = models.ImageField(upload_to='payment_receipt/images')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'order payment'
+        verbose_name_plural = 'order payments'
+    
+    def __str__(self):
+        return f"Payment for Order ID: {self.order.order_id}"
