@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block title %}
 Cart
 {% endblock title %}
@@ -69,13 +69,30 @@ Cart
         <div class="cart_summary">
           <h4>Cart Summary</h4>
           <ul>
-            <li>Subtotal: <span>$</span></li>
-            <li>Tax: <span>$</span></li>
+            <!-- <li>Subtotal: <span>$</span></li> -->
             <li>Total: <span>${{cart.get_total_price}}</span></li>
+
+            {% if cart.coupon %}
+            <li>Applied Code: <span style="color: green;"><b>{{cart.coupon.code}}</b></span></li>
+            <li>Discount : <span>(%{{cart.coupon.discount}})</span></li>
+            <li>Discounted Value: <span style="color: red;"><b>-${{cart.get_discount}}</b></span></li>
+            <li>Discount Applied: <span>${{cart.apply_discount}}</span></li>
+            <li>Tax Value: <span style="color: orange;"><b>$20</b></span></li>
+            <li>SubTotal: <span style="color: rgb(50, 50, 209);"><b>${{cart.apply_tax}}</b></span></li>
+            {% else %}
+            <li>Tax Value: <span style="color: orange;"><b>$20</b></span></li>
+            <li>SubTotal: <span>$
+                {% if not cart.get_total_price %}
+                0
+                {% else %}
+                {{cart.apply_tax}}
+                {% endif %}
+              </span></li>
+            {% endif %}
           </ul>
-          <form class="coupon_form mt-4">
-            <label for="coupon_code">Coupon Code</label>
-            <input type="text" id="coupon_code" class="form-control" placeholder="Enter your code">
+          <form class="coupon_form mt-4" action="{% url 'coupon-apply' %}" method="post">
+            {% csrf_token %}
+            {{coupon_apply_form|crispy}}
             <button type="submit" class="btn btn-primary mt-2">Apply Coupon</button>
           </form>
           <a href="{% url 'order-create' %}" class="btn btn-success mt-4 w-100">Checkout</a>

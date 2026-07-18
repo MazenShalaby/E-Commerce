@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .cart import Cart
 from .forms import CartAddForm
 from inventory.models import Product
+from coupons.forms import CouponApplyForm
 
 # Create your views here.
 
@@ -45,5 +46,6 @@ def cart_detail(request):
                 'override': True,
             }
         )
-    context = {'cart': cart}
+    coupon_apply_form = CouponApplyForm(request.POST)
+    context = {'cart': cart, 'coupon_apply_form': coupon_apply_form}
     return render(request, "cart/cart_detail.html", context)

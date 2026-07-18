@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
 from decimal import Decimal
 from django.conf import settings
 
 from inventory.models import Product
-
+from coupons.models  import Coupon
 # create your cart here.
 
 
@@ -11,6 +12,10 @@ class Cart:
     def __init__(self, request):
         self.session = request.session
         self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
+        self.coupon_id = self.session.get('coupon_id')
+        if len(self) == 0:
+            self.session['coupon_id'] = None
+            self.save()
 
     def save(self):
         self.session.modified = True
@@ -58,3 +63,31 @@ class Cart:
 
     def __len__(self):
         return sum(item["quantity"] for item in self.cart.values())
+
+    @property
+    def coupon(self):
+        if self.coupon_id:
+            return get_object_or_404(Coupon, id=self.coupon_id)
+        return None
+    
+    def apply_discount(self): # base_price * (1 - percentage / 100)
+        if self.coupon_id:
+            return round(self.get_total_price() * (1 - self.coupon.discount / Decimal(100)), 2)
+        return self.get_total_price()
+    
+    def get_discount(self): # value reduced from total price
+        if self.coupon_id:
+            return self.get_total_price() - self.apply_discount()
+        return Decimal(0)
+
+    def get_total_price_after_discount_applied(self): # new total price after discount applied 
+        if self.coupon_id:
+            return self.get_discount()
+        return None
+    
+    def apply_tax(self, tax_value=20):
+        if self.coupon_id:
+            return self.apply_discount() + tax_value
+        elif not self.coupon_id:
+            return self.get_total_price() + tax_value
+        return None
