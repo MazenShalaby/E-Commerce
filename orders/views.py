@@ -42,7 +42,7 @@ def order_create(request):
 
                 cart.clear()
                 created = True
-                redirect("order-payment", order_id=order.id)
+                return redirect("order-payment", order_id=order.id)
 
                 context = {"order": order, "order_created": created}
                 return render(request, "orders/order_create.html", context)

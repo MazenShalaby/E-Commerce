@@ -16,7 +16,7 @@ class OrderPaymentForm(forms.ModelForm):
         model = OrderPayment
         fields = ['payment_phone', 'payment_receipt']
     
-    def clean_pay_phone(self):
+    def clean_payment_phone(self):
         payment_phone = self.cleaned_data.get('payment_phone')
 
         if not payment_phone.isdigit():
