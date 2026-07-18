@@ -13,7 +13,6 @@ from cart.cart import Cart
 def order_create(request):
 
     cart = Cart(request)
-    created = False
 
     if cart:
         if request.method == "POST":
@@ -41,7 +40,6 @@ def order_create(request):
                 send_mail(subject, message, from_email, recipient_list)
 
                 cart.clear()
-                created = True
                 return redirect("order-payment", order_id=order.id)
         else:
             form = OrderCreateForm()

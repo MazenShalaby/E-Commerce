@@ -6,9 +6,12 @@ Successful Payment
 
 {% block content %}
 
+<br>
 <div class="container justify-content-center">
+
     <div class="alert alert-success" role="alert">
-        <p>Your order with Order ID: <b>{{order.order_id}}</b> has been paid successfully!</p>
+        <p>Your order has been paid successfully!</p>
+        <p>Order ID: <b>{{order.order_id}}</b></p>
     </div>
 </div>
 {% endblock content %}
