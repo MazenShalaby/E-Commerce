@@ -27,7 +27,7 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if not self.order_id:
             unique_order_id = generate_order_id()
-            while Order.objects.filter(order_id__iexact=unique_order_id).exists:
+            while Order.objects.filter(order_id__iexact=unique_order_id).exists():
                 unique_order_id = generate_order_id()
             self.order_id = unique_order_id
         super().save(*args, **kwargs) # Call the real save() method
