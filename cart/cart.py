@@ -77,17 +77,18 @@ class Cart:
         except Coupon.DoesNotExist:
             return None
 
-    def apply_discount(self): # base_price * (1 - percentage / 100)
-        if self.coupon:
-            return round(self.get_total_price() * (1 - self.coupon.discount / Decimal(100)), 2)
+    def get_total_after_discount(self): # base_price * (1 - percentage / 100)
+        coupon = self.coupon
+        if coupon:
+            return round(self.get_total_price() * (1 - coupon.discount / Decimal(100)), 2)
         return self.get_total_price()
     
     def get_discounted_value(self): # value reduced from total price
         if self.coupon:
-            return self.get_total_price() - self.apply_discount()
+            return self.get_total_price() - self.get_total_after_discount()
         return Decimal(0)
 
     def get_sub_total(self, tax_value=20):
         if self.coupon:
-            return self.apply_discount() + tax_value
+            return self.get_total_after_discount() + tax_value
         return self.get_total_price() + tax_value

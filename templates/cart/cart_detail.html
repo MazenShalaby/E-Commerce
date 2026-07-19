@@ -76,7 +76,7 @@ Cart
             <li>Applied Code: <span style="color: green;"><b>{{cart.coupon.code}}</b></span></li>
             <li>Discount : <span>(%{{cart.coupon.discount}})</span></li>
             <li>Discounted Value: <span style="color: red;"><b>-${{cart.get_discounted_value}}</b></span></li>
-            <li>Discount Applied: <span>${{cart.apply_discount}}</span></li>
+            <li>Discount Applied: <span>${{cart.get_total_after_discount}}</span></li>
             <li>Tax Value: <span style="color: orange;"><b>$20</b></span></li>
             <li>SubTotal: <span style="color: rgb(50, 50, 209);"><b>${{cart.get_sub_total}}</b></span></li>
             {% else %}
