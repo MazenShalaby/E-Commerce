@@ -35,7 +35,7 @@ def order_create(request):
                     product_price = item["price"]
                     product_quantity = item["quantity"]
                     message += f"\nProduct Name: {product_name}\nProduct Price: {product_price}\nProduct Quantity: {product_quantity}\n"
-                message += f"\nTotal Price: {cart.apply_tax()}"
+                message += f"\nTotal Price: {cart.get_sub_total()}"
                 from_email = settings.DEFAULT_FROM_EMAIL
                 recipient_list = [order.email]
                 send_mail(subject, message, from_email, recipient_list)

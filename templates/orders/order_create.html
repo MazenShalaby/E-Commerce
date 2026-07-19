@@ -24,7 +24,7 @@ Create Order
     {% if cart_length == 0 %}
     <span>No items within the cart!</span>
     {% else %}
-    <span>Total Price: <b style="color: rgb(50, 50, 209);">${{cart.apply_tax}}</b></span>
+    <span>Total Price: <b style="color: rgb(50, 50, 209);">${{cart.get_sub_total}}</b></span>
 </div>
 <br>
 <div class="container justify-content-center">

@@ -69,28 +69,25 @@ class Cart:
 
     @property
     def coupon(self):
-        if self.coupon_id:
-            return get_object_or_404(Coupon, id=self.coupon_id)
-        return None
-    
+        if not self.coupon_id:
+            return None
+
+        try:
+            return Coupon.objects.get(id=self.coupon_id)
+        except Coupon.DoesNotExist:
+            return None
+
     def apply_discount(self): # base_price * (1 - percentage / 100)
-        if self.coupon_id:
+        if self.coupon:
             return round(self.get_total_price() * (1 - self.coupon.discount / Decimal(100)), 2)
         return self.get_total_price()
     
-    def get_discount(self): # value reduced from total price
-        if self.coupon_id:
+    def get_discounted_value(self): # value reduced from total price
+        if self.coupon:
             return self.get_total_price() - self.apply_discount()
         return Decimal(0)
 
-    def get_total_price_after_discount_applied(self): # new total price after discount applied 
-        if self.coupon_id:
-            return self.get_discount()
-        return None
-    
-    def apply_tax(self, tax_value=20):
-        if self.coupon_id:
+    def get_sub_total(self, tax_value=20):
+        if self.coupon:
             return self.apply_discount() + tax_value
-        elif not self.coupon_id:
-            return self.get_total_price() + tax_value
-        return None
+        return self.get_total_price() + tax_value

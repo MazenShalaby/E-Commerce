@@ -75,17 +75,17 @@ Cart
             {% if cart.coupon %}
             <li>Applied Code: <span style="color: green;"><b>{{cart.coupon.code}}</b></span></li>
             <li>Discount : <span>(%{{cart.coupon.discount}})</span></li>
-            <li>Discounted Value: <span style="color: red;"><b>-${{cart.get_discount}}</b></span></li>
+            <li>Discounted Value: <span style="color: red;"><b>-${{cart.get_discounted_value}}</b></span></li>
             <li>Discount Applied: <span>${{cart.apply_discount}}</span></li>
             <li>Tax Value: <span style="color: orange;"><b>$20</b></span></li>
-            <li>SubTotal: <span style="color: rgb(50, 50, 209);"><b>${{cart.apply_tax}}</b></span></li>
+            <li>SubTotal: <span style="color: rgb(50, 50, 209);"><b>${{cart.get_sub_total}}</b></span></li>
             {% else %}
             <li>Tax Value: <span style="color: orange;"><b>$20</b></span></li>
             <li>SubTotal: <span>$
                 {% if not cart.get_total_price %}
                 0
                 {% else %}
-                {{cart.apply_tax}}
+                {{cart.get_sub_total}}
                 {% endif %}
               </span></li>
             {% endif %}
