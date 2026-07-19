@@ -38,7 +38,7 @@ def product_remove(request, product_slug):
 
 def cart_detail(request):
     cart = Cart(request)
-    
+    cart._clear_coupon_if_cart_empty()
     for item in cart:
         item['update_item_quantity'] = CartAddForm(
             initial={
