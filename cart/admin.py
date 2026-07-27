@@ -13,4 +13,6 @@ class CartItemInline(admin.TabularInline):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
-    
+    list_display = ['user', 'coupon', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['user', 'coupon']
