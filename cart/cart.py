@@ -89,6 +89,8 @@ class Cart:
         )
 
     def __len__(self):
+        if self.request.user.is_authenticated:
+            return sum(item.quantity for item in self.db_cart.items.all())
         return sum(item["quantity"] for item in self.cart.values())
 
     @property
