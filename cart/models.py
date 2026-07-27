@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 
 from inventory.models import Product
+from coupons.models import Coupon
 
 
 # Create your models here.
@@ -11,6 +12,12 @@ class Cart(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="cart"
+    )
+    coupon = models.ForeignKey(
+        Coupon,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     created_at = models.DateTimeField(auto_now_add=True)
 class CartItem(models.Model):
