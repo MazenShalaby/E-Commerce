@@ -4,15 +4,22 @@ from django.conf import settings
 
 from inventory.models import Product
 from coupons.models  import Coupon
+from .models import Cart as CartModel, CartItem
+
 # create your cart here.
 
 
 class Cart:
 
     def __init__(self, request):
-        self.session = request.session
-        self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
-        self.coupon_id = self.session.get('coupon_id')
+        self.request = request
+        
+        if request.user.is_authenticated:
+            self.db_cart, _ = CartModel.objects.get_or_create(user=request.user)
+        else:
+            self.session = request.session
+            self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
+            self.coupon_id = self.session.get('coupon_id')
 
     def save(self):
         self.session.modified = True
