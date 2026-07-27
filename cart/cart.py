@@ -74,7 +74,7 @@ class Cart:
 
     def clear(self):
         self.cart.clear()
-        self._clear_coupon_if_cart_empty()
+        self.clear_coupon_if_cart_empty()
         self.save()
 
     def __iter__(self):
