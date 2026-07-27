@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from decimal import Decimal
 from django.conf import settings
+from django.db.models import F, Sum, DecimalField, ExpressionWrapper
+
 
 from inventory.models import Product
 from coupons.models  import Coupon
@@ -84,8 +86,14 @@ class Cart:
             yield item
 
     def get_total_price(self):
+        if self.request.user.is_authenticated:
+            return sum(
+                item.product.price * item.quantity for item in self.db_cart.items.select_related("product")
+            )
+
         return sum(
-            Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
+            Decimal(item["price"]) * item["quantity"]
+            for item in self.cart.values()
         )
 
     def __len__(self):
