@@ -73,17 +73,27 @@ class Cart:
         self.save()
 
     def __iter__(self):
-        product_ids = self.cart.keys()
-        products = Product.objects.filter(id__in=product_ids)
-        cart = self.cart.copy()
+        if self.request.user.is_authenticated:
+            for item in self.db_cart.items.select_related("product"):
+                yield {
+                    "product": item.product,
+                    "price": item.product.price,
+                    "quantity": item.quantity,
+                    "total_price": item.product.price * item.quantity,
+                }
 
-        for product in products:
-            cart[str(product.id)]["product"] = product
+        else:
+            product_ids = self.cart.keys()
+            products = Product.objects.filter(id__in=product_ids)
+            cart = self.cart.copy()
 
-        for item in cart.values():
-            item["price"] = Decimal(item["price"])
-            item["total_price"] = item["price"] * item["quantity"]
-            yield item
+            for product in products:
+                cart[str(product.id)]["product"] = product
+
+            for item in cart.values():
+                item["price"] = Decimal(item["price"])
+                item["total_price"] = item["price"] * item["quantity"]
+                yield item
 
     def get_total_price(self):
         if self.request.user.is_authenticated:
