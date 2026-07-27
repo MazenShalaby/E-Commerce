@@ -118,6 +118,9 @@ class Cart:
 
     @property
     def coupon(self):
+        if self.request.user.is_authenticated:
+            return None
+
         if not self.coupon_id:
             return None
 
