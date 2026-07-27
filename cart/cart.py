@@ -3,10 +3,10 @@ from decimal import Decimal
 from django.conf import settings
 from django.db.models import F, Sum, DecimalField, ExpressionWrapper
 
-
 from inventory.models import Product
 from coupons.models  import Coupon
 from .models import Cart as CartModel, CartItem
+from .forms import CartAddForm
 
 # create your cart here.
 
@@ -86,7 +86,9 @@ class Cart:
         self.clear_coupon_if_cart_empty()
         self.save()
 
-    def __iter__(self):
+
+    def __iter__(self): 
+
         if self.request.user.is_authenticated:
             for item in self.db_cart.items.select_related("product"):
                 yield {
@@ -94,8 +96,13 @@ class Cart:
                     "price": item.product.price,
                     "quantity": item.quantity,
                     "total_price": item.product.price * item.quantity,
+                    "update_item_quantity": CartAddForm(
+                        initial={
+                            "quantity": item.quantity,
+                            "override": True,
+                        }
+                    ),
                 }
-
         else:
             product_ids = self.cart.keys()
             products = Product.objects.filter(id__in=product_ids)
@@ -107,6 +114,12 @@ class Cart:
             for item in cart.values():
                 item["price"] = Decimal(item["price"])
                 item["total_price"] = item["price"] * item["quantity"]
+                item["update_item_quantity"] = CartAddForm(
+                    initial={
+                        "quantity": item["quantity"],
+                        "override": True,
+                    }
+                )
                 yield item
 
     def get_total_price(self):

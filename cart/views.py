@@ -39,13 +39,9 @@ def product_remove(request, product_slug):
 def cart_detail(request):
     cart = Cart(request)
     cart.clear_coupon_if_cart_empty()
-    for item in cart:
-        item['update_item_quantity'] = CartAddForm(
-            initial={
-                'quantity': item['quantity'],
-                'override': True,
-            }
-        )
-    coupon_apply_form = CouponApplyForm(request.POST)
-    context = {'cart': cart, 'coupon_apply_form': coupon_apply_form}
+
+    context = {
+        "cart": cart,
+        "coupon_apply_form": CouponApplyForm(),
+    }
     return render(request, "cart/cart_detail.html", context)
