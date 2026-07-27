@@ -26,33 +26,33 @@ class Cart:
 
     def add(self, product, quantity=1, override_quantity=False):
 
-            if self.request.user.is_authenticated:
-                item, created = CartItem.objects.get_or_create(
-                    cart=self.db_cart,
-                    product=product,
-                    defaults={"quantity": 0},
-                )
+        if self.request.user.is_authenticated:
+            item, created = CartItem.objects.get_or_create(
+                cart=self.db_cart,
+                product=product,
+                defaults={"quantity": 0},
+            )
 
-                if override_quantity:
-                    item.quantity = quantity
-                else:
-                    item.quantity += quantity
-
-                item.save()
-
+            if override_quantity:
+                item.quantity = quantity
             else:
-                product_id = str(product.id)
-                item = self.cart.setdefault(
-                    product_id,
-                    {"quantity": 0, "price": str(product.price)},
-                )
+                item.quantity += quantity
 
-                if override_quantity:
-                    item["quantity"] = quantity
-                else:
-                    item["quantity"] += quantity
+            item.save()
 
-                self.save()
+        else:
+            product_id = str(product.id)
+            item = self.cart.setdefault(
+                product_id,
+                {"quantity": 0, "price": str(product.price)},
+            )
+
+            if override_quantity:
+                item["quantity"] = quantity
+            else:
+                item["quantity"] += quantity
+
+            self.save()
 
     def _clear_coupon_if_cart_empty(self):
         if not self.cart:
