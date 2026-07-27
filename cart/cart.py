@@ -24,7 +24,8 @@ class Cart:
             self.coupon_id = self.session.get('coupon_id')
 
     def save(self):
-        self.session.modified = True
+        if not self.request.user.is_authenticated:
+            self.session.modified = True
 
     def add(self, product, quantity=1, override_quantity=False):
 
@@ -59,21 +60,29 @@ class Cart:
     def clear_coupon_if_cart_empty(self):
         if self.request.user.is_authenticated:
             if not self.db_cart.items.exists():
-                # We'll decide later how to store coupons for DB carts.
-                pass
+                self.db_cart.coupon = None
+                self.db_cart.save(update_fields=["coupon"])
         else:
             if not self.cart:
                 self.session["coupon_id"] = None
             
     def remove(self, product):
-        product_id = str(product.id)
-        if product_id in self.cart:
-            del self.cart[product_id]
-        self._clear_coupon_if_cart_empty()
-        self.save()
+        if self.request.user.is_authenticated:
+            self.db_cart.items.filter(product=product).delete()
+        else:
+            product_id = str(product.id)
+            if product_id in self.cart:
+                del self.cart[product_id]
 
+        self.clear_coupon_if_cart_empty()
+        self.save()
+        
     def clear(self):
-        self.cart.clear()
+        if self.request.user.is_authenticated:
+            self.db_cart.items.all().delete()
+        else:
+            self.cart.clear()
+
         self.clear_coupon_if_cart_empty()
         self.save()
 
