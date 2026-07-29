@@ -1,7 +1,5 @@
-from django.shortcuts import get_object_or_404
 from decimal import Decimal
 from django.conf import settings
-from django.db.models import F, Sum, DecimalField, ExpressionWrapper
 
 from inventory.models import Product
 from coupons.models  import Coupon
