@@ -13,7 +13,6 @@ class Cart:
 
     def __init__(self, request):
         self.request = request
-        
         if request.user.is_authenticated:
             self.db_cart, _ = CartModel.objects.get_or_create(user=request.user)
         else:
@@ -26,7 +25,6 @@ class Cart:
             self.session.modified = True
 
     def add(self, product, quantity=1, override_quantity=False):
-
         if self.request.user.is_authenticated:
             item, created = CartItem.objects.get_or_create(
                 cart=self.db_cart,
@@ -40,7 +38,6 @@ class Cart:
                 item.quantity += quantity
 
             item.save()
-
         else:
             product_id = str(product.id)
             item = self.cart.setdefault(
@@ -52,7 +49,6 @@ class Cart:
                 item["quantity"] = quantity
             else:
                 item["quantity"] += quantity
-
             self.save()
 
     def clear_coupon_if_cart_empty(self):
@@ -63,7 +59,7 @@ class Cart:
         else:
             if not self.cart:
                 self.session["coupon_id"] = None
-            
+
     def remove(self, product):
         if self.request.user.is_authenticated:
             self.db_cart.items.filter(product=product).delete()
@@ -71,7 +67,6 @@ class Cart:
             product_id = str(product.id)
             if product_id in self.cart:
                 del self.cart[product_id]
-
         self.clear_coupon_if_cart_empty()
         self.save()
         
@@ -80,13 +75,10 @@ class Cart:
             self.db_cart.items.all().delete()
         else:
             self.cart.clear()
-
         self.clear_coupon_if_cart_empty()
         self.save()
 
-
     def __iter__(self): 
-
         if self.request.user.is_authenticated:
             for item in self.db_cart.items.select_related("product"):
                 yield {
@@ -120,35 +112,21 @@ class Cart:
                 )
                 yield item
 
-    def get_total_price(self):
-        if self.request.user.is_authenticated:
-            return sum(
-                item.product.price * item.quantity for item in self.db_cart.items.select_related("product")
-            )
-
-        return sum(
-            Decimal(item["price"]) * item["quantity"]
-            for item in self.cart.values()
-        )
-
     def __len__(self):
         if self.request.user.is_authenticated:
             return sum(item.quantity for item in self.db_cart.items.all())
         return sum(item["quantity"] for item in self.cart.values())
 
-    @property
-    def coupon(self):
+    def get_total_price(self):
         if self.request.user.is_authenticated:
-            return self.db_cart.coupon
-
-        if not self.coupon_id:
-            return None
-
-        try:
-            return Coupon.objects.get(id=self.coupon_id)
-        except Coupon.DoesNotExist:
-            return None
-
+            return sum(
+                item.product.price * item.quantity for item in self.db_cart.items.select_related("product")
+            )
+        return sum(
+            Decimal(item["price"]) * item["quantity"]
+            for item in self.cart.values()
+        )
+        
     def get_total_after_discount(self): # base_price * (1 - percentage / 100)
         coupon = self.coupon
         if coupon:
@@ -164,6 +142,19 @@ class Cart:
         if self.coupon:
             return self.get_total_after_discount() + tax_value
         return self.get_total_price() + tax_value
+
+    @property
+    def coupon(self):
+        if self.request.user.is_authenticated:
+            return self.db_cart.coupon
+
+        if not self.coupon_id: # this clause prevents query db of the next line
+            return None
+
+        try:
+            return Coupon.objects.get(id=self.coupon_id)
+        except Coupon.DoesNotExist:
+            return None
 
     def set_coupon(self, coupon):
         if self.request.user.is_authenticated:
