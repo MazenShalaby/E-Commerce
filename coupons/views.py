@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -7,6 +7,7 @@ from .models import Coupon
 from cart.cart import Cart
 
 # Create your views here.
+
 
 @require_POST
 def coupon_apply(request):
