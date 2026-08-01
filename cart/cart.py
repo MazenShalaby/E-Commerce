@@ -146,11 +146,11 @@ class Cart:
         return self.get_total_price() + tax_value
 
     @property
-    def coupon(self):
+    def coupon(self): # getter
         if self.request.user.is_authenticated:
             return self.db_cart.coupon
 
-        if not self.coupon_id: # this clause prevents query db of the next line
+        if not self.coupon_id: # Avoid an unnecessary database query of the next line
             return None
 
         try:
@@ -158,7 +158,7 @@ class Cart:
         except Coupon.DoesNotExist:
             return None
 
-    def set_coupon(self, coupon):
+    def set_coupon(self, coupon): # setter
         if self.request.user.is_authenticated:
             self.db_cart.coupon = coupon
             self.db_cart.save(update_fields=['coupon'])
@@ -166,7 +166,7 @@ class Cart:
             self.session['coupon_id'] = coupon.id
             self.save()
 
-    def clear_coupon(self):
+    def clear_coupon(self): # remover
         if self.request.user.is_authenticated:
             self.db_cart.coupon = None
             self.db_cart.save(update_fields=['coupon'])
