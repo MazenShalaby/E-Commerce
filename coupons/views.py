@@ -12,10 +12,10 @@ from cart.cart import Cart
 def coupon_apply(request):
     now = timezone.now()
     form = CouponApplyForm(request.POST)
+    cart = Cart(request)
 
     if form.is_valid():
-        code = form.cleaned_data["code"]
-
+        code = form.cleaned_data.get("code")
         try:
             coupon = Coupon.objects.get(
                 code__iexact=code,
@@ -23,20 +23,8 @@ def coupon_apply(request):
                 valid_to__gte=now,
                 active=True,
             )
-
-            if request.user.is_authenticated:
-                cart = Cart(request)
-                cart.db_cart.coupon = coupon
-                cart.db_cart.save(update_fields=["coupon"])
-            else:
-                request.session["coupon_id"] = coupon.id
-
+            cart.set_coupon(coupon)
         except Coupon.DoesNotExist:
-            if request.user.is_authenticated:
-                cart = Cart(request)
-                cart.db_cart.coupon = None
-                cart.db_cart.save(update_fields=["coupon"])
-            else:
-                request.session["coupon_id"] = None
+            cart.clear_coupon()
 
     return redirect("cart-detail")
