@@ -1,9 +1,11 @@
 from decimal import Decimal
+
 from django.conf import settings
 
 from inventory.models import Product
 from coupons.models  import Coupon
-from .models import Cart as CartModel, CartItem
+from .models import Cart as CartModel
+from .models import CartItem
 from .forms import CartAddForm
 
 # create your cart here.
