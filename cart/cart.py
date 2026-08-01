@@ -164,3 +164,19 @@ class Cart:
         if self.coupon:
             return self.get_total_after_discount() + tax_value
         return self.get_total_price() + tax_value
+
+    def set_coupon(self, coupon):
+        if self.request.user.is_authenticated:
+            self.db_cart.coupon = coupon
+            self.db_cart.save(update_fields=['coupon'])
+        else:
+            self.session['coupon_id'] = coupon.id
+            self.save()
+
+    def clear_coupon(self):
+        if self.request.user.is_authenticated:
+            self.db_cart.coupon = None
+            self.db_cart.save(update_fields=['coupon'])
+        else:
+            self.session["coupon_id"] = None
+            self.save()
