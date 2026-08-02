@@ -54,7 +54,7 @@ class Cart:
 
     def add(self, product, quantity=1, override_quantity=False):
         if self.request.user.is_authenticated:
-            item, created = CartItem.objects.get_or_create(
+            item, _ = CartItem.objects.get_or_create(
                 cart=self.db_cart,
                 product=product,
                 defaults={"quantity": 0},
