@@ -15,16 +15,43 @@ class Cart:
 
     def __init__(self, request):
         self.request = request
+        self.session = request.session
+        self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
+        self.coupon_id = self.session.get('coupon_id')
+        
         if request.user.is_authenticated:
             self.db_cart, _ = CartModel.objects.get_or_create(user=request.user)
-        else:
-            self.session = request.session
-            self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
-            self.coupon_id = self.session.get('coupon_id')
 
     def save(self):
         if not self.request.user.is_authenticated:
             self.session.modified = True
+
+    def merge_session_cart(self):
+        if not self.request.user.is_authenticated:
+            return
+        
+        if not self.cart: # avoid
+            return
+        
+        for product_id, item in self.cart.items():
+            
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                continue
+            
+            cart_item, _ = CartItem.objects.get_or_create(
+                cart=self.db_cart,
+                product=product,
+                defaults={'quantity': 0}
+            )
+            
+            cart_item.quantity += item['quantity']
+            cart_item.save(update_fields=["quantity"])
+        
+        self.cart.clear()
+        self.session['coupon_id'] = None
+        self.session.modified = True
 
     def add(self, product, quantity=1, override_quantity=False):
         if self.request.user.is_authenticated:
