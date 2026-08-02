@@ -30,11 +30,10 @@ class Cart:
         if not self.request.user.is_authenticated:
             return
         
-        if not self.cart: # avoid
+        if not self.cart: # Avoid an unnecessary merge
             return
         
         for product_id, item in self.cart.items():
-            
             try:
                 product = Product.objects.get(id=product_id)
             except Product.DoesNotExist:
