@@ -16,7 +16,7 @@ class Cart:
     def __init__(self, request):
         self.request = request
         self.session = request.session
-        self.cart = self.session.setdefault(settings.CART_SESSION_ID, {})
+        self.session_cart = self.session.setdefault(settings.CART_SESSION_ID, {})
         self.coupon_id = self.session.get('coupon_id')
         
         if request.user.is_authenticated:
@@ -30,10 +30,10 @@ class Cart:
         if not self.request.user.is_authenticated:
             return
         
-        if not self.cart: # Avoid an unnecessary merge
+        if not self.session_cart: # Avoid an unnecessary merge
             return
         
-        for product_id, item in self.cart.items():
+        for product_id, item in self.session_cart.items():
             try:
                 product = Product.objects.get(id=product_id)
             except Product.DoesNotExist:
@@ -48,7 +48,7 @@ class Cart:
             cart_item.quantity += item['quantity']
             cart_item.save(update_fields=["quantity"])
         
-        self.cart.clear()
+        self.session_cart.clear()
         self.session['coupon_id'] = None
         self.session.modified = True
 
@@ -68,7 +68,7 @@ class Cart:
             item.save()
         else:
             product_id = str(product.id)
-            item = self.cart.setdefault(
+            item = self.session_cart.setdefault(
                 product_id,
                 {"quantity": 0, "price": str(product.price)},
             )
@@ -85,7 +85,7 @@ class Cart:
                 self.db_cart.coupon = None
                 self.db_cart.save(update_fields=["coupon"])
         else:
-            if not self.cart:
+            if not self.session_cart:
                 self.session["coupon_id"] = None
 
     def remove(self, product):
@@ -93,8 +93,8 @@ class Cart:
             self.db_cart.items.filter(product=product).delete()
         else:
             product_id = str(product.id)
-            if product_id in self.cart:
-                del self.cart[product_id]
+            if product_id in self.session_cart:
+                del self.session_cart[product_id]
         self.clear_coupon_if_cart_empty()
         self.save()
         
@@ -102,7 +102,7 @@ class Cart:
         if self.request.user.is_authenticated:
             self.db_cart.items.all().delete()
         else:
-            self.cart.clear()
+            self.session_cart.clear()
         self.clear_coupon_if_cart_empty()
         self.save()
 
@@ -122,9 +122,9 @@ class Cart:
                     ),
                 }
         else:
-            product_ids = self.cart.keys()
+            product_ids = self.session_cart.keys()
             products = Product.objects.filter(id__in=product_ids)
-            cart = self.cart.copy()
+            cart = self.session_cart.copy()
 
             for product in products:
                 cart[str(product.id)]["product"] = product
@@ -143,7 +143,7 @@ class Cart:
     def __len__(self):
         if self.request.user.is_authenticated:
             return sum(item.quantity for item in self.db_cart.items.all())
-        return sum(item["quantity"] for item in self.cart.values())
+        return sum(item["quantity"] for item in self.session_cart.values())
 
     def get_total_price(self):
         if self.request.user.is_authenticated:
@@ -152,7 +152,7 @@ class Cart:
             )
         return sum(
             Decimal(item["price"]) * item["quantity"]
-            for item in self.cart.values()
+            for item in self.session_cart.values()
         )
         
     def get_total_after_discount(self): # base_price * (1 - percentage / 100)
