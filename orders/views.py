@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse
+import json
 
 from .forms import OrderCreateForm
 from .models import Order, OrderItem
@@ -59,7 +60,11 @@ def order_payment(request, order_id):
 def success_payment(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     cart = Cart(request)
-    cart.clear()
+    
+    if not order.paid:
+        order.paid = True  
+        order.save(update_fields=['paid'])
+        cart.clear()
     
     context = {'order': order}
     return render(request, 'orders/success_payment.html', context)

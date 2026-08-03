@@ -15,7 +15,7 @@ Order Payment
 
         <br>
         <h3>Your Order</h3>
-        
+
         <ul>
             {% for item in cart %}
             <li>
@@ -25,49 +25,49 @@ Order Payment
         </ul>
 
         <span>Total Price: <b style="color: rgb(50, 50, 209);">${{cart.get_sub_total}}</b></span>
-        
+
     </div>
 
     <br>
 
     <!-- Set up a container element for the button -->
     <div id="paypal-button-container"></div>
-        <script
-            src="https://www.paypal.com/sdk/js?client-id=AW9V8kqdEdiq_WAFR8wxyD10TRUQ3fV80UuOFI7WKIDTtg9M1q9QCTyq3oXNHqHqvtCrfSp0hzsTxFiT&currency=USD">
-        </script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AW9V8kqdEdiq_WAFR8wxyD10TRUQ3fV80UuOFI7WKIDTtg9M1q9QCTyq3oXNHqHqvtCrfSp0hzsTxFiT&currency=USD">
+    </script>
 
-        <script>
-            const total_price = "{{ cart.get_sub_total }}";
+    <script>
 
-            paypal.Buttons({
+        const total_price = "{{ cart.get_sub_total }}";
 
-                createOrder: function (data, actions) {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: total_price
-                            }
-                        }]
-                    });
-                },
+        paypal.Buttons({
 
-                onApprove: function (data, actions) {
-                    return actions.order.capture().then(function (orderData) {
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: total_price,
+                        }
+                    }]
+                });
+            },
 
-                        console.log(
-                            "Capture result",
-                            orderData,
-                            JSON.stringify(orderData, null, 2)
-                        );
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (orderData) {
 
-                        window.location.href =
-                            "{% url 'success-payment' order_id=order.id %}";
-                    });
-                }
+                    console.log(
+                        "Capture result",
+                        orderData,
+                        JSON.stringify(orderData, null, 2)
+                    );
+                    window.location.href = "{% url 'success-payment' order_id=order.id %}";
+                });
+            }
 
-            }).render("#paypal-button-container");
-        </script>
-        
-    </div>
+        }).render("#paypal-button-container");
+
+    </script>
+
+</div>
 </div>
 {% endblock content %}
