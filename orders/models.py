@@ -46,6 +46,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     state_governorates = models.CharField(max_length=50, choices=EgyptGovernorates.choices, null=True)
+    street = models.CharField(max_length=250)
     city = models.CharField(max_length=30)
     postal_code = models.PositiveIntegerField()
     paid = models.BooleanField(default=False)
