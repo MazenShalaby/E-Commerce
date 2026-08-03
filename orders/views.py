@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse
-import json
 
 from .forms import OrderCreateForm
 from .models import Order, OrderItem
