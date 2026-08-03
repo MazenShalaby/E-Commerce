@@ -13,5 +13,5 @@ class OrderItemInline(admin.TabularInline):
 class OrderItemInline(admin.ModelAdmin):
     inlines = [OrderItemInline]
     list_display = ['order_id', 'email', 'first_name', 'last_name', 'paid']
-    search_fields = ['order_id', 'email', 'first_name', 'last_name', 'city', 'address', 'postal_code']
+    search_fields = ['order_id', 'email', 'first_name', 'last_name', 'city', 'state_governorates', 'postal_code']
     list_filter = ['paid', 'created_at', 'updated_at']

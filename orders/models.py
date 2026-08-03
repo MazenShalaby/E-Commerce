@@ -13,11 +13,39 @@ def generate_order_id(length=16):
     return "".join(random_characters) # str
 
 class Order(models.Model):
+    class EgyptGovernorates(models.TextChoices):
+        CAIRO = "Cairo", "Cairo"
+        GIZA = "Giza", "Giza"
+        ALEXANDRIA = "Alexandria", "Alexandria"
+        DAKAHLIA = "Dakahlia", "Dakahlia"
+        RED_SEA = "Red Sea", "Red Sea"
+        BEHEIRA = "Beheira", "Beheira"
+        FAYOUM = "Fayoum", "Fayoum"
+        GHARBIA = "Gharbia", "Gharbia"
+        ISMAILIA = "Ismailia", "Ismailia"
+        MENOFIA = "Menofia", "Menofia"
+        MINYA = "Minya", "Minya"
+        QALYUBIA = "Qalyubia", "Qalyubia"
+        NEW_VALLEY = "New Valley", "New Valley"
+        SUEZ = "Suez", "Suez"
+        ASWAN = "Aswan", "Aswan"
+        ASSIUT = "Assiut", "Assiut"
+        BENI_SUEF = "Beni Suef", "Beni Suef"
+        PORT_SAID = "Port Said", "Port Said"
+        DAMIETTA = "Damietta", "Damietta"
+        SHARKIA = "Sharkia", "Sharkia"
+        SOUTH_SINAI = "South Sinai", "South Sinai"
+        KAFR_EL_SHEIKH = "Kafr El Sheikh", "Kafr El Sheikh"
+        MATROUH = "Matrouh", "Matrouh"
+        LUXOR = "Luxor", "Luxor"
+        QENA = "Qena", "Qena"
+        NORTH_SINAI = "North Sinai", "North Sinai"
+        SOHAG = "Sohag", "Sohag"
     order_id = models.CharField(max_length=16, unique=True, default=generate_order_id)
     email = models.EmailField()
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
-    address = models.CharField(max_length=250)
+    state_governorates = models.CharField(max_length=50, choices=EgyptGovernorates.choices, null=True)
     city = models.CharField(max_length=30)
     postal_code = models.PositiveIntegerField()
     paid = models.BooleanField(default=False)
