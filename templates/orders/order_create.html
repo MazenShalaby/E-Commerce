@@ -6,27 +6,8 @@ Create Order
 {% endblock title %}
 
 {% block content %}
-
-<div class="container justify-content-center">
-
-    <br><br>
-    <h1 class="text-center">Checkout</h1>
-    <h3>Your Order</h3>
-    <ul>
-        {% for item in cart %}
-        <li>
-            {{item.quantity}}x {{item.product.name}} | ${{item.price}}
-        </li>
-        {% endfor %}
-    </ul>
-
-    {% with cart_length=cart|length %}
-    {% if cart_length == 0 %}
-    <span>No items within the cart!</span>
-    {% else %}
-    <span>Total Price: <b style="color: rgb(50, 50, 209);">${{cart.get_sub_total}}</b></span>
-</div>
 <br>
+<h1 class="text-center">Checkout</h1>
 <div class="container justify-content-center">
     <form action="" method="post">
         {% csrf_token %}
@@ -35,7 +16,4 @@ Create Order
     </form>
 </div>
 <br>
-{% endif %}
-{% endwith %}
-
 {% endblock content %}
