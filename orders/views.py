@@ -3,8 +3,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponse
 
-from .forms import OrderCreateForm, OrderPaymentForm
-from .models import Order, OrderItem, OrderPayment
+from .forms import OrderCreateForm
+from .models import Order, OrderItem
 from cart.cart import Cart
 
 # Create your views here.
@@ -50,25 +50,9 @@ def order_create(request):
 
 
 def order_payment(request, order_id):
-    
     order = get_object_or_404(Order, id=order_id)
     
-    if request.method == 'POST':
-        form = OrderPaymentForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            order.paid = True
-            order.save()
-            payment_form = form.save(commit=False)
-            payment_form.order = order
-            payment_form.save()
-            return redirect('success-payment', order_id=order.id)
-    else:
-        form = OrderPaymentForm()
-    
-    context = {
-        'order': order,
-        'form': form
-        }
+    context = {'order': order,}
     return render(request, 'orders/order_payment.html', context)
 
 
