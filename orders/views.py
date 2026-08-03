@@ -40,7 +40,6 @@ def order_create(request):
                 recipient_list = [order.email]
                 send_mail(subject, message, from_email, recipient_list)
 
-                cart.clear()
                 return redirect("order-payment", order_id=order.id)
         else:
             form = OrderCreateForm()
@@ -66,12 +65,17 @@ def order_payment(request, order_id):
     else:
         form = OrderPaymentForm()
     
-    context = {'form': form}
+    context = {
+        'order': order,
+        'form': form
+        }
     return render(request, 'orders/order_payment.html', context)
 
 
 def success_payment(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    cart = Cart(request)
+    cart.clear()
     
     context = {'order': order}
     return render(request, 'orders/success_payment.html', context)
