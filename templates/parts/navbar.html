@@ -30,11 +30,11 @@
                                 <button type="submit" class="btn btn-danger">Logout</button>
                         </a>
                     {% else %}
+                    <a href="{% url 'login' %}">
+                        <button type="submit" class="btn btn-success">login</button>
+                    </a>
                         <a href="{% url 'register' %}">
                             <button type="submit" class="btn btn-primary">Register</button>
-                        </a>
-                        <a href="{% url 'login' %}">
-                            <button type="submit" class="btn btn-success">login</button>
                         </a>
                     {% endif %}
                     <a href="{% url 'cart-detail' %}" class="cart-link">
