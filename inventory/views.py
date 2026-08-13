@@ -25,11 +25,11 @@ def product_list(request, category_slug=None):
             products = Product.objects.select_related('category').filter(category=category)
         else:
             products = Product.objects.select_related('category')
-            
+
         cache.set(cache_key, products, timeout=60*30) # 30 minutes  
 
     context = {
-        'products': products,
+        'products': cached_data,
         'categories': categories,
         }
     return render(request, 'inventory/product_list.html', context)
@@ -47,7 +47,7 @@ def product_detail(request, product_slug):
     cart_add_form = CartAddForm(request.POST)
     
     context = {
-        'product': product,
+        'product': cached_data,
         'cart_add_form': cart_add_form
         }
     return render(request, 'inventory/product_detail.html', context)
