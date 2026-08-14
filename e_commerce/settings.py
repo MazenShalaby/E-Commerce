@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'silk',
+    'debug_toolbar',
     
     # local apps
     'accounts.apps.AccountsConfig',
@@ -62,7 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'silk.middleware.SilkyMiddleware',
+    'silk.middleware.SilkyMiddleware', # silk
+    'debug_toolbar.middleware.DebugToolbarMiddleware', # django toolbar
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -181,10 +183,15 @@ CART_SESSION_ID = 'cart'
 
 ########################### [Cache Configuration] ##########################
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1'
     }
 }
+
+########################### [Django Toolbar Configuration ] ##########################
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
