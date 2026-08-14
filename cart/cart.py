@@ -79,14 +79,6 @@ class Cart:
                 item["quantity"] += quantity
             self.save()
 
-    def clear_coupon_if_cart_empty(self):
-        if self.request.user.is_authenticated:
-            if not self.db_cart.items.exists():
-                self.db_cart.coupon = None
-                self.db_cart.save(update_fields=["coupon"])
-        else:
-            if not self.session_cart:
-                self.session["coupon_id"] = None
 
     def remove(self, product):
         if self.request.user.is_authenticated:
@@ -95,7 +87,7 @@ class Cart:
             product_id = str(product.id)
             if product_id in self.session_cart:
                 del self.session_cart[product_id]
-        self.clear_coupon_if_cart_empty()
+        self.remove_coupon()
         self.save()
         
     def clear(self):
@@ -103,7 +95,7 @@ class Cart:
             self.db_cart.items.all().delete()
         else:
             self.session_cart.clear()
-        self.clear_coupon_if_cart_empty()
+        self.remove_coupon()
         self.save()
 
     def __iter__(self): 
@@ -199,3 +191,12 @@ class Cart:
         else:
             self.session["coupon_id"] = None
             self.save()
+
+    def remove_coupon(self):
+        if self.request.user.is_authenticated:
+            if not self.db_cart.items.exists():
+                self.db_cart.coupon = None
+                self.db_cart.save(update_fields=["coupon"])
+        else:
+            if not self.session_cart:
+                self.session["coupon_id"] = None

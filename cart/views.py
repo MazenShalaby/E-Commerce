@@ -38,7 +38,7 @@ def product_remove(request, product_slug):
 
 def cart_detail(request):
     cart = Cart(request)
-    cart.clear_coupon_if_cart_empty()
+    cart.remove_coupon()
 
     context = {
         "cart": cart,
