@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'crispy_forms',
     'crispy_bootstrap4',
+    'silk',
     
     # local apps
     'accounts.apps.AccountsConfig',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'

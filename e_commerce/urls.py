@@ -22,13 +22,19 @@ from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
+    # default apps routes
     path('admin/', admin.site.urls),
+    
+    # local apps routes
     path('accounts/', include('accounts.urls')),
     path('inventory/', include('inventory.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
     path('coupons/', include('coupons.urls')),
-    path("", TemplateView.as_view(template_name='home.html'), name='home')
+    path("", TemplateView.as_view(template_name='home.html'), name='home'),
+    
+    # debugging & monitoring tools 
+    path('silk/', include('silk.urls')),
 ]
 
 
