@@ -200,3 +200,4 @@ class Cart:
         else:
             if not self.session_cart:
                 self.session["coupon_id"] = None
+                self.save()
