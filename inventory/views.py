@@ -17,9 +17,9 @@ def product_list(request, category_slug=None):
     else:
         cache_key = "products_all"
 
-    cached_data = cache.get(cache_key)
+    products = cache.get(cache_key)
     
-    if cached_data is None:
+    if products is None:
         if category_slug:
             category = get_object_or_404(Category, slug=category_slug)
             products = Product.objects.select_related('category').filter(category=category)
@@ -29,7 +29,7 @@ def product_list(request, category_slug=None):
         cache.set(cache_key, products, timeout=60*30) # 30 minutes  
 
     context = {
-        'products': cached_data,
+        'products': products,
         'categories': categories,
         }
     return render(request, 'inventory/product_list.html', context)
@@ -38,16 +38,16 @@ def product_list(request, category_slug=None):
 def product_detail(request, product_slug):
     
     cache_key = f"product_{product_slug}"
-    cached_data = cache.get(cache_key)
+    product = cache.get(cache_key)
     
-    if cached_data is None:
+    if product is None:
         product = get_object_or_404(Product, slug=product_slug)
         cache.set(cache_key, product, timeout=60*30) # 30 minutes 
 
     cart_add_form = CartAddForm(request.POST)
     
     context = {
-        'product': cached_data,
+        'product': product,
         'cart_add_form': cart_add_form
         }
     return render(request, 'inventory/product_detail.html', context)
