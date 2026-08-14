@@ -19,7 +19,13 @@ from django.urls import path, include
 from django.conf import settings 
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
+from django.views.decorators.cache import cache_page
 
+# create you main project urlpatterns here.
+
+home_view = TemplateView.as_view(template_name='home.html')
+cache_decorator = cache_page(timeout=60*15)
+cached_view = cache_decorator(home_view)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +34,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
     path('coupons/', include('coupons.urls')),
-    path("", TemplateView.as_view(template_name='home.html'), name='home')
+    path("", cached_view, name='home'),
 ]
 
 
