@@ -28,7 +28,16 @@ def order_create(request):
                 order_created.delay(order.id)
                 return redirect("order-payment", order_id=order.id)
         else:
-            form = OrderCreateForm()
+            if request.user.is_authenticated:
+                form = OrderCreateForm(
+                    initial={
+                        'email': request.user.email,
+                        'first_name': request.user.first_name,
+                        'last_name': request.user.last_name,
+                    }
+                )
+            else:
+                form = OrderCreateForm()
             context = {"form": form}
             return render(request, "orders/order_create.html", context)
     else:
