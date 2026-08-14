@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 from .models import Category, Product
 from cart.forms import CartAddForm
 
 # Create your views here.
 
-
+@cache_page(60*30)
 def product_list(request, category_slug=None):
 
     categories = Category.objects.prefetch_related("category_products")
@@ -35,6 +36,7 @@ def product_list(request, category_slug=None):
     return render(request, 'inventory/product_list.html', context)
 
 
+@cache_page(60*30)
 def product_detail(request, product_slug):
     
     cache_key = f"product_{product_slug}"
@@ -53,6 +55,7 @@ def product_detail(request, product_slug):
     return render(request, 'inventory/product_detail.html', context)
 
 
+@cache_page(60*30)
 def product_search(request):
     query = request.GET.get('query', '')
     result = Product.objects.none()
