@@ -93,7 +93,8 @@ Cart
           <form class="coupon_form mt-4" action="{% url 'coupon-apply' %}" method="post">
             {% csrf_token %}
             {{coupon_apply_form|crispy}}
-            <button type="submit" class="btn btn-primary mt-2">Apply Coupon</button>
+            <button type="submit" class="btn btn-primary mt-2 ml-3">Apply Coupon</button>
+            <button href="{% url 'coupon-remove' %}" type="submit" class="btn btn-danger mt-2 ml-4">Remove Coupon</button>
           </form>
           <a href="{% url 'order-create' %}" class="btn btn-success mt-4 w-100">Checkout</a>
         </div>

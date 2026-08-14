@@ -29,3 +29,10 @@ def coupon_apply(request):
             cart.clear_coupon()
 
     return redirect("cart-detail")
+
+
+@require_POST
+def coupon_remove(request):
+    cart = Cart(request)
+    cart.remove_coupon()
+    return redirect("cart-detail")
