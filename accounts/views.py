@@ -54,10 +54,6 @@ def register(request):
             except:
                 user.delete()
                 raise ValueError("Faild to send activation mail!")
-        else:
-            raise forms.ValidationError(
-                "Something went wrong durring account registration!"
-            )
     else:
         form = RegisterForm()
 
