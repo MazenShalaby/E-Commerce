@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode, urlencode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
 from .forms import RegisterForm
 from .models import Account
@@ -49,10 +50,11 @@ def register(request):
 
             try:
                 mail.send()
-                query_params = urlencode({"command": "activation", "email": {email}})
-                return redirect(f"{reverse('login')}?{query_params}")
+                messages.success(request, "Activation mail was sent :)")
+                return redirect(reverse('login') + f'?command=activation&email={email}')
             except:
                 user.delete()
+                messages.error(request, "Activation mail failed to be sent :(")
                 raise ValueError("Faild to send activation mail!")
     else:
         form = RegisterForm()
@@ -70,15 +72,30 @@ def login_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(
+            request,
+            email=email,
+            password=password,
+        )
 
         if user is not None:
             login(request, user)
+            messages.success(
+                request,
+                f"Welcome, {user.first_name}!"
+            )
             return redirect("home")
-        else:
-            return redirect("login")
 
-    return render(request, "accounts/login.html", context={})
+        account = get_object_or_404(Account, email=email)
+
+        if account and not account.is_active:
+            messages.info(request, "Activate your registered account first to log in.")
+        else:
+            messages.error(request, "Invalid email or password.")
+
+        return redirect("login")
+
+    return render(request, "accounts/login.html")
 
 
 def logout_view(request):
