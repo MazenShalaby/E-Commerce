@@ -72,18 +72,11 @@ def login_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        user = authenticate(
-            request,
-            email=email,
-            password=password,
-        )
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
-            messages.success(
-                request,
-                f"Welcome, {user.first_name}!"
-            )
+            messages.success(request,f"Welcome, {user.first_name}!")
             return redirect("home")
 
         account = get_object_or_404(Account, email=email)
