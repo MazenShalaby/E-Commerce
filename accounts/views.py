@@ -79,7 +79,7 @@ def login_view(request):
             messages.success(request,f"Welcome, {user.first_name}!")
             return redirect("home")
 
-        account = get_object_or_404(Account, email=email)
+        account = Account.objects.filter(email=email).first()
 
         if account and not account.is_active:
             messages.info(request, "Activate your registered account first to log in.")
