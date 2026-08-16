@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode, urlencode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import login, logout, authenticate
-
 
 from .forms import RegisterForm
 from .models import Account
@@ -15,10 +15,10 @@ from .models import Account
 
 
 def register(request):
-    
+
     if request.user.is_authenticated:
         return redirect("home")
-    
+
     if request.method == "POST":
         form = RegisterForm(request.POST, files=request.FILES)
         if form.is_valid():
@@ -49,7 +49,8 @@ def register(request):
 
             try:
                 mail.send()
-                return redirect('login' + f"?command=activation&email={email}")
+                query_params = urlencode({"command": "activation", "email": {email}})
+                return redirect(f"{reverse('login')}?{query_params}")
             except:
                 user.delete()
                 raise ValueError("Faild to send activation mail!")
@@ -61,28 +62,28 @@ def register(request):
 
 
 def login_view(request):
-    
+
     if request.user.is_authenticated:
         return redirect("home")
-    
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
         user = authenticate(request, email=email, password=password)
-        
+
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect("home")
         else:
-            return redirect('login')
-    
-    return render(request, 'accounts/login.html', context={})
+            return redirect("login")
+
+    return render(request, "accounts/login.html", context={})
 
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect("login")
 
 
 def activate_registered_account(request, user_id_64, token):
@@ -91,6 +92,6 @@ def activate_registered_account(request, user_id_64, token):
     if (user is not None) and (default_token_generator.check_token(user, token)):
         user.is_active = True
         user.save()
-        return redirect('login')
+        return redirect("login")
     else:
-        return redirect('register')
+        return redirect("register")
